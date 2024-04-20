@@ -1,0 +1,78 @@
+﻿@page "/GameHost/{Name}/{SessionId}"
+@using GamePad.Web.Components.Management
+@using GamePad.Web.Components.BasePages
+@inherits Client
+@rendermode InteractiveServer
+
+<PageTitle>GameHost</PageTitle>
+
+<h1>Hosting session: @this.Session.Name</h1>
+
+<div style="display: flex; height: 100%;">
+    <!-- Left div -->
+    <div style="flex: 1; background-color: lightblue;">
+        <!-- Content for the left div -->
+        <label>Controller input: @controllerInput</label>
+    </div>
+
+    <!-- Right div -->
+    <div style="width: 200px; background-color: lightgreen; display: flex; flex-direction: column;">
+        <!-- Loop to generate buttons -->
+        @for (int i = 0; i < Session.Controllers.Length; i++)
+        {
+            var j = i;
+            if (Session.Controllers[j] == null)
+            {
+                <button style="margin-bottom: 10px;" disabled>empty spot</button>
+            }
+            else
+            {
+                <button style="margin-bottom: 10px;" @onclick="() => KickPlayer(Session.Controllers[j]!)">Kick: @Session.Controllers[j]!.Name</button>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private string controllerInput = string.Empty;
+
+    public EventHandler? PlayerKicked;
+    public void KickPlayer(Controller controller)
+    {
+        PlayerKicked?.Invoke(controller, EventArgs.Empty);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        this.Session.Initialize(this);
+        this.Session.PlayerJoined += OnPlayersChanged;
+        this.Session.PlayerLeft += OnPlayersChanged;
+        this.Session.GameCommandReceived += OnGameCommandReceived;
+    }
+
+    public void OnPlayersChanged(object? sender, EventArgs e)
+    {
+        this.InvokeAsync(this.StateHasChanged);
+    }
+
+    public void OnGameCommandReceived(object? sender, GameCommandEventArgs e)
+    {
+        controllerInput = e.Command;
+        this.InvokeAsync(this.StateHasChanged);
+    }
+
+
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        MyGlobal.GlobalCounterChanged += OnGlobalCounterChanged;
+    }
+
+    private void OnGlobalCounterChanged(object? sender, EventArgs e) => this.InvokeAsync(this.StateHasChanged);
+
+}

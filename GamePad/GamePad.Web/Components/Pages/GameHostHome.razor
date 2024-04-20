@@ -1,0 +1,47 @@
+﻿@page "/gamehosthome"
+@using GamePad.Web.Components.Management
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<PageTitle>GameHostHome</PageTitle>
+
+<h1>GameHostHome</h1>
+
+@for (int i = 0; i < Manager.Games.Count; i++)
+{
+    var localIndex = i;
+    <label>
+        @*I tried to fill the selectedGame field with a binding but this required the implementation of a type conversion, how to do this if i want a reference to the original object?, and why so complicated?*@
+        <input type="radio" name="customObjects" @onchange="() => SetSelectedGame(localIndex)" /> @Manager.Games[localIndex].Name
+    </label>
+    <br />
+}
+@if (isGameSelected)
+{
+    <input type="text" name="tbHostName" @oninput="ValidateTextBox" placeholder="Enter a name for your session" />
+    <br />
+    <button disabled="@string.IsNullOrWhiteSpace(suppliedSessionName)" @onclick="() => CreateGameListing(selectedGame)">Create Game Listing</button>
+}
+
+@code {
+    private Game selectedGame;
+    private bool isGameSelected = false;
+    private string suppliedSessionName = string.Empty;
+
+    private void SetSelectedGame(int index)
+    {
+        selectedGame = Manager.Games[index];
+        isGameSelected = true;
+    }
+
+    private void ValidateTextBox(ChangeEventArgs e)
+    {
+        suppliedSessionName = e.Value?.ToString();
+    }
+
+    private void CreateGameListing(Game game)
+    {
+        var session = Manager.CreateSession(game);
+        NavigationManager.NavigateTo($"/gamehost/{suppliedSessionName}/{session.Id}");
+    }
+}

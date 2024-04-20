@@ -1,0 +1,52 @@
+﻿@page "/controllerhome"
+@using GamePad.Web.Components.Management
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<PageTitle>ControllerHome</PageTitle>
+
+<h1>ControllerHome</h1>
+
+@for (int i = 0; i < Manager.Sessions.Count; i++)
+{
+    var localIndex = i;
+    if (!Manager.Sessions[localIndex].IsAcceptingPlayers)
+        continue;
+
+    <label>
+        @*I tried to fill the selectedGame field with a binding but this required the implementation of a type conversion, how to do this if i want a reference to the original object?, and why so complicated?*@
+        <input type="radio" name="customObjects" @onchange="() => SetSelectedSession(localIndex)" /> @Manager.Sessions[localIndex].Name
+    </label>
+    <br />
+}
+@if (isSessionSelected)
+{
+    <input type="text" name="tbHostName" @oninput="ValidateTextBox" placeholder="Enter a name for your session" />
+    <br />
+    <button disabled="@string.IsNullOrWhiteSpace(suppliedPlayerName)" @onclick="() => JoinSession(selectedSession)">Join Session</button>
+}
+
+@code {
+    private Session selectedSession;
+    private bool isSessionSelected = false;
+    private string suppliedPlayerName = string.Empty;
+
+    private void SetSelectedSession(int index)
+    {
+        selectedSession = Manager.Sessions[index];
+        isSessionSelected = true;
+    }
+
+    private void ValidateTextBox(ChangeEventArgs e)
+    {
+        suppliedPlayerName = e.Value?.ToString();
+    }
+
+    private void JoinSession(Session session)
+    {
+        // TODO: navigate to controller page based on selected game in a smart way
+        // hacky for now
+        var targetController = $"game{Manager.Games.IndexOf(session.Game)+1}controller";
+        NavigationManager.NavigateTo($"/{targetController}/{suppliedPlayerName}/{session.Id}");
+    }
+}

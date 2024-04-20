@@ -4,3 +4,19 @@
 
 /.vs
 /GamePad/.vs
+/GamePad/GamePad.Web/Properties/PublishProfiles
+# Blazor
+*.user
+*.suo
+*.cache
+*.bin
+*.obj
+*.dll
+*.exe
+*.pdb
+*.log
+*.vscode/
+*.vs/
+*.bak
+**/bin/
+**/obj/

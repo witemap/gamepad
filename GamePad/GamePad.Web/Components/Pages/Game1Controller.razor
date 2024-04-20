@@ -1,0 +1,28 @@
+﻿@page "/game1controller/{Name}/{SessionId}"
+@using GamePad.Web.Components.Management
+@using GamePad.Web.Components.BasePages
+@inherits Controller
+@rendermode InteractiveServer
+
+<PageTitle>Game1Controller</PageTitle>
+
+<div style="display: flex; height: 100vh;">
+    <!-- Button 1 -->
+    <button style="flex: 1; font-size: 80pt; background-color: lightcoral;" @onclick="(() => Send('A'))">A</button>
+
+    <!-- Button 2 -->
+    <button style="flex: 1; font-size: 80pt; background-color: lightblue;" @onclick="(() => Send('B'))">B</button>
+</div>
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    private void Send(char val)
+    {
+        Session.SendCommand(this, val.ToString());
+    }
+}

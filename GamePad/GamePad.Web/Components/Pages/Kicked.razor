@@ -1,0 +1,13 @@
+﻿@page "/kicked/{kickedName}"
+@rendermode InteractiveServer
+
+<PageTitle>Kicked</PageTitle>
+
+<h1>kicked from @kickedName</h1>
+
+@code {
+    @code {
+        [Parameter]
+        public string kickedName { get; set; }
+    }
+}

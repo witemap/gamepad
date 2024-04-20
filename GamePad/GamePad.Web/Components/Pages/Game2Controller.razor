@@ -1,0 +1,26 @@
+﻿@page "/game2controller/{Name}/{SessionId}"
+@using GamePad.Web.Components.Management
+@using GamePad.Web.Components.BasePages
+@using GamePad.Web.Components.Controls
+@inherits Controller
+@rendermode InteractiveServer
+
+<PageTitle>Game1Controller</PageTitle>
+
+<div style="display: flex; height: 100vh;">
+    <!-- Button 1 -->
+    <Joystick />
+</div>
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    private void Send(char val)
+    {
+        Session.SendCommand(this, val.ToString());
+    }
+}
