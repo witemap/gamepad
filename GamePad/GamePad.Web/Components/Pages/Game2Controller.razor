@@ -9,7 +9,7 @@
 
 <div style="display: flex; height: 100vh;">
     <!-- Button 1 -->
-    <Joystick />
+    <Joystick OnCommand="Send"/>
 </div>
 
 
@@ -19,8 +19,8 @@
         base.OnInitialized();
     }
 
-    private void Send(char val)
+    private void Send(string val)
     {
-        Session.SendCommand(this, val.ToString());
+        Session.SendCommand(this, val);
     }
 }

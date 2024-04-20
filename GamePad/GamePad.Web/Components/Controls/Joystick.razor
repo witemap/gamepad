@@ -1,24 +1,27 @@
-﻿<h3>Joystick</h3>
+﻿@inject IJSRuntime JSRuntime
+
+<h3>Joystick</h3>
 <div class="row">
 			<div class="columnLateral">
 				<div id="joy1Div" style="width:200px;height:200px;margin:50px"></div>
-				Posizione X:<input id="joy1PosizioneX" type="text" /><br />
-				Posizione Y:<input id="joy1PosizioneY" type="text" /><br />
-				Direzione:<input id="joy1Direzione" type="text" /><br />
+				Position X:<input id="joy1PosizioneX" type="text" /><br />
+				Position Y:<input id="joy1PosizioneY" type="text" /><br />
+				Direction:<input id="joy1Direzione" type="text" /><br />
 				X :<input id="joy1X" type="text" /><br />
 				Y :<input id="joy1Y" type="text" /><br />
-				aditest :<input id="aditest" type="text" />
+                aditest :<input id="aditest" type="text"/>
 			</div>		
 </div>
-<script type="text/javascript">
 
+<script type="text/javascript">
     let StickStatus =
     {
         xPosition: 0,
         yPosition: 0,
         x: 0,
         y: 0,
-        cardinalDirection: "C"
+        cardinalDirection: "C",
+        oldCardinalDirection: "C"
     };
 
     /**
@@ -245,7 +248,7 @@
                 result = "C";
             }
             if (vertical < directionVerticalLimitNeg) {
-                result = "N";
+                result = "W";
             }
             if (vertical > directionVerticalLimitPos) {
                 result = "S";
@@ -253,18 +256,18 @@
 
             if (orizontal < directionHorizontalLimitNeg) {
                 if (result === "C") {
-                    result = "W";
+                    result = "A";
                 }
                 else {
-                    result += "W";
+                    result += "A";
                 }
             }
             if (orizontal > directionHorizontalLimitPos) {
                 if (result === "C") {
-                    result = "E";
+                    result = "D";
                 }
                 else {
-                    result += "E";
+                    result += "D";
                 }
             }
 
@@ -305,9 +308,6 @@
     });
 
 
-
-
-
 	// Create JoyStick object into the DIV 'joy1Div'
 	//var Joy1 = new JoyStick('joy1Div');
 
@@ -324,9 +324,45 @@
 		joy1Direzione.value = stickData.cardinalDirection;
 		joy1X.value = stickData.x;
 		joy1Y.value = stickData.y;
+
+        //if the direction changes, send the new direction to the server
+        if (stickData.cardinalDirection === stickData.oldCardinalDirection) return;
+        stickData.oldCardinalDirection = stickData.cardinalDirection;
+        joystickComponent.invokeMethodAsync('MyCSharpMethod', stickData.cardinalDirection);
 	});
 </script>
 
 @code {
+    [Parameter]
+    public EventCallback<string> OnCommand { get; set; }
 
+    private string direction { get; set; } = "C";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        await JSRuntime.InvokeVoidAsync("injectBlazorObjectReference", DotNetObjectReference.Create(this));
+    }
+
+    private async Task Send(string val)
+    {
+        await OnCommand.InvokeAsync(val);
+    }
+
+    [JSInvokable]
+    public void MyCSharpMethod(string message)
+    {
+        Console.WriteLine($"C# Method Called with Message: {message}");
+        Send(message);
+        int i = 0;
+    }
 }
+
+<script>
+    var joystickComponent = null;
+    function injectBlazorObjectReference(dotnetHelper) {
+        joystickComponent = dotnetHelper;
+    }
+</script>
