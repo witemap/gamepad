@@ -7,7 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="GameBuilds\TanksTutorial\" />
+    <Content Remove="wwwroot\GameBuilds\TanksTutorial\Build\test.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\GameBuilds\TanksTutorial\Build\builds.data.gz" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\Build\builds.framework.js.gz" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\Build\builds.loader.js" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\Build\builds.wasm.gz" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\index.html" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\favicon.ico" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\fullscreen-button.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\MemoryProfiler.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\progress-bar-empty-dark.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\progress-bar-empty-light.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\progress-bar-full-dark.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\progress-bar-full-light.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\style.css" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\unity-logo-dark.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\unity-logo-light.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\webgl-logo.png" />
+    <None Include="wwwroot\GameBuilds\TanksTutorial\TemplateData\webmemd-icon.png" />
   </ItemGroup>
 
 </Project>
