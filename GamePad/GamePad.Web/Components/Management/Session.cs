@@ -3,17 +3,17 @@ using GamePad.Web.Components.Pages;
 
 namespace GamePad.Web.Components.Management
 {
-    public class Session(Game game)
+    public class Session(GameInfo game)
     {
         public string Id { get; init; } = Guid.NewGuid().ToString();
-        public Game Game { get; init; } = game;
+        public GameInfo GameInfo { get; init; } = game;
         public GameHost Host { get; private set; }
         public Controller?[] Controllers { get; init; } = new Controller?[game.MaxPlayers];
         private int NumActivePlayers => Controllers.Count(controller => controller != null);
 
-        public bool IsAcceptingPlayers => NumActivePlayers < Game.MaxPlayers;
-        public bool IsRunning => NumActivePlayers >= Game.MinPlayers;
-        public string Name => Game.Name + " - " + Host.Name;
+        public bool IsAcceptingPlayers => NumActivePlayers < GameInfo.MaxPlayers;
+        public bool IsRunning => NumActivePlayers >= GameInfo.MinPlayers;
+        public string Name => GameInfo.Name + " - " + Host.Name;
 
         public void Initialize(GameHost host)
         {

@@ -4,15 +4,15 @@ namespace GamePad.Web.Components.Management
 {
     public static class Manager
     {
-        public static List<Game> Games { get; } =
+        public static List<GameInfo> Games { get; } =
         [
-            new ("Game1", 1, 1),
-            new ("Game2", 1, 6),
-            new ("Tanks", 1, 2)
+            new ("EmptyGame1", 1, 1),
+            new ("EmptyGame2", 1, 6),
+            new ("TanksTutorial", 1, 2)
         ];
         public static List<Session> Sessions { get; } = [];
 
-        public static Game GetGameById(string id)
+        public static GameInfo GetGameById(string id)
         {
             return Games.FirstOrDefault(game => game.Id == id)!;
         }
@@ -22,7 +22,7 @@ namespace GamePad.Web.Components.Management
             return Sessions.FirstOrDefault(session => session.Id == id)!;
         }
 
-        public static Session CreateSession(Game game)
+        public static Session CreateSession(GameInfo game)
         {
             var session = new Session(game);
             Sessions.Add(session);

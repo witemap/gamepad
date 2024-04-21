@@ -1,0 +1,18 @@
+﻿@using GamePad.Web.Components.Management
+@using GamePad.Web.Components.BaseComponents
+@inherits Game
+
+<div style="flex: 1; background-color: lightblue;">
+    <!-- Content for the left div -->
+    <label>Controller input: @controllerInput</label>
+</div>
+
+@code {
+    private string controllerInput = string.Empty;
+
+    public override void HandleGameCommand(object? sender, GameCommandEventArgs e)
+    {
+        controllerInput = e.Command;
+        this.InvokeAsync(this.StateHasChanged);
+    }
+}

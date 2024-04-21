@@ -46,7 +46,7 @@
     {
         // TODO: navigate to controller page based on selected game in a smart way
         // hacky for now
-        var targetController = $"game{Manager.Games.IndexOf(session.Game)+1}controller";
+        var targetController = $"game{Manager.Games.IndexOf(session.GameInfo)+1}controller";
         NavigationManager.NavigateTo($"/{targetController}/{suppliedPlayerName}/{session.Id}");
     }
 }

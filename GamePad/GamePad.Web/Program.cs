@@ -1,4 +1,5 @@
 using GamePad.Web.Components;
+using GamePad.Web.Components.Games;
 
 namespace GamePad.Web
 {
@@ -11,6 +12,11 @@ namespace GamePad.Web
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            // Add Games
+            builder.Services.AddScoped<EmptyGame1>();
+            builder.Services.AddScoped<EmptyGame2>();
+            builder.Services.AddScoped<TanksTutorial>();
 
             var app = builder.Build();
 

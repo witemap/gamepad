@@ -24,7 +24,7 @@
 }
 
 @code {
-    private Game selectedGame;
+    private GameInfo selectedGame;
     private bool isGameSelected = false;
     private string suppliedSessionName = string.Empty;
 
@@ -39,7 +39,7 @@
         suppliedSessionName = e.Value?.ToString();
     }
 
-    private void CreateGameListing(Game game)
+    private void CreateGameListing(GameInfo game)
     {
         var session = Manager.CreateSession(game);
         NavigationManager.NavigateTo($"/gamehost/{suppliedSessionName}/{session.Id}");

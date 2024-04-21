@@ -1,7 +1,12 @@
 ﻿@page "/GameHost/{Name}/{SessionId}"
-@using GamePad.Web.Components.Management
+@using GamePad.Web.Components.BaseComponents
 @using GamePad.Web.Components.BasePages
+@using GamePad.Web.Components.Games
+@using GamePad.Web.Components.Management
 @inherits Client
+@inject EmptyGame1 emptyGame1 // Injecting the games. TODO: does this even work?
+@inject EmptyGame2 emptyGame2
+@inject TanksTutorial tanksTutorial
 @rendermode InteractiveServer
 
 <PageTitle>GameHost</PageTitle>
@@ -10,11 +15,22 @@
 
 <div style="display: flex; height: 100%;">
     <!-- Left div -->
-    <div style="flex: 1; background-color: lightblue;">
-        <!-- Content for the left div -->
-        <label>Controller input: @controllerInput</label>
-    </div>
-
+    <!-- DI did not work somehow. TODO: figure out DI here -->
+    @switch (this.Session.GameInfo.Name)
+    {
+        case "EmptyGame1":
+            <EmptyGame1 @ref=activeGame />
+            break;
+        case "EmptyGame2":
+            <EmptyGame2 @ref=activeGame />
+            break;
+        case "TanksTutorial":
+            <TanksTutorial @ref=activeGame />
+            break;
+        default:
+            <EmptyGame1 @ref=activeGame />
+            break;
+    }
     <!-- Right div -->
     <div style="width: 200px; background-color: lightgreen; display: flex; flex-direction: column;">
         <!-- Loop to generate buttons -->
@@ -34,13 +50,9 @@
 </div>
 
 @code {
-    private string controllerInput = string.Empty;
+    private Game activeGame;
 
     public EventHandler? PlayerKicked;
-    public void KickPlayer(Controller controller)
-    {
-        PlayerKicked?.Invoke(controller, EventArgs.Empty);
-    }
 
     protected override void OnInitialized()
     {
@@ -51,6 +63,23 @@
         this.Session.GameCommandReceived += OnGameCommandReceived;
     }
 
+    private Game ChooseGame()
+    {
+        // TODO: use this for DI, unclear when to assign so it's not disposed and render handle is avaiable
+        return (this.Session.GameInfo.Name) switch
+        {
+            "EmptyGame1" => emptyGame1,
+            "EmptyGame2" => emptyGame2,
+            "TanksTutorial" => tanksTutorial,
+            _ => emptyGame1
+        };
+    }
+
+    private void KickPlayer(Controller controller)
+    {
+        PlayerKicked?.Invoke(controller, EventArgs.Empty);
+    }
+
     public void OnPlayersChanged(object? sender, EventArgs e)
     {
         this.InvokeAsync(this.StateHasChanged);
@@ -58,21 +87,6 @@
 
     public void OnGameCommandReceived(object? sender, GameCommandEventArgs e)
     {
-        controllerInput = e.Command;
-        this.InvokeAsync(this.StateHasChanged);
+        this.activeGame.HandleGameCommand(sender, e);
     }
-
-
-
-
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(1);
-        MyGlobal.GlobalCounterChanged += OnGlobalCounterChanged;
-    }
-
-    private void OnGlobalCounterChanged(object? sender, EventArgs e) => this.InvokeAsync(this.StateHasChanged);
-
 }
