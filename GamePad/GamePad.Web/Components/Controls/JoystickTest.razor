@@ -4,6 +4,12 @@
 <div class="row">
 			<div class="columnLateral">
 				<div id="joy1Div" style="width:200px;height:200px;margin:50px"></div>
+				Position X:<input id="joy1PosizioneX" type="text" /><br />
+				Position Y:<input id="joy1PosizioneY" type="text" /><br />
+				Direction:<input id="joy1Direzione" type="text" /><br />
+				X :<input id="joy1X" type="text" /><br />
+				Y :<input id="joy1Y" type="text" /><br />
+                aditest :<input id="aditest" type="text"/>
 			</div>		
 </div>
 
@@ -305,9 +311,20 @@
 	// Create JoyStick object into the DIV 'joy1Div'
 	//var Joy1 = new JoyStick('joy1Div');
 
+	var joy1IinputPosX = document.getElementById("joy1PosizioneX");
+	var joy1InputPosY = document.getElementById("joy1PosizioneY");
+	var joy1Direzione = document.getElementById("joy1Direzione");
+	var joy1X = document.getElementById("joy1X");
+	var joy1Y = document.getElementById("joy1Y");
 
 	// Create JoyStick object into the DIV 'joy1Div'
 	var Joy1 = new JoyStick('joy1Div', {}, function (stickData) {
+		joy1IinputPosX.value = stickData.xPosition;
+		joy1InputPosY.value = stickData.yPosition;
+		joy1Direzione.value = stickData.cardinalDirection;
+		joy1X.value = stickData.x;
+		joy1Y.value = stickData.y;
+
         //if the direction changes, send the new direction to the server
         if (stickData.cardinalDirection === stickData.oldCardinalDirection) return;
         stickData.oldCardinalDirection = stickData.cardinalDirection;
@@ -317,7 +334,7 @@
 
 @code {
     [Parameter]
-    public EventCallback<(Joystick, string)> DirectionChanged { get; set; }
+    public EventCallback<(JoystickTest, string)> DirectionChanged { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

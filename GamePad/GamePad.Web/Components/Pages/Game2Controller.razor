@@ -9,18 +9,21 @@
 
 <div style="display: flex; height: 100vh;">
     <!-- Button 1 -->
-    <Joystick OnCommand="Send"/>
+    <Joystick @ref=joystick DirectionChanged="OnDirectionChanged" />
 </div>
 
 
 @code {
+    private Joystick? joystick;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
     }
 
-    private void Send(string val)
+    private void OnDirectionChanged((Joystick, string) bla)
     {
-        Session.SendCommand(this, val);
+        var (sender, newDirection) = bla;
+        Session.SendCommand(this, newDirection);
     }
 }
