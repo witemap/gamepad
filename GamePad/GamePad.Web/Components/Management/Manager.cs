@@ -7,18 +7,19 @@ namespace GamePad.Web.Components.Management
         public static List<Game> Games { get; } =
         [
             new ("Game1", 1, 1),
-            new ("Game2", 1, 6)
+            new ("Game2", 1, 6),
+            new ("Tanks", 1, 2)
         ];
         public static List<Session> Sessions { get; } = [];
 
         public static Game GetGameById(string id)
         {
-            return Games.FirstOrDefault(game => game.Id == id);
+            return Games.FirstOrDefault(game => game.Id == id)!;
         }
 
         internal static Session GetSessionById(string id)
         {
-            return Sessions.FirstOrDefault(session => session.Id == id);
+            return Sessions.FirstOrDefault(session => session.Id == id)!;
         }
 
         public static Session CreateSession(Game game)

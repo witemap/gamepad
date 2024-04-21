@@ -1,0 +1,42 @@
+﻿@page "/game3controller/{Name}/{SessionId}"
+@using GamePad.Web.Components.Management
+@using GamePad.Web.Components.BasePages
+@using GamePad.Web.Components.Controls
+@inherits Controller
+@rendermode InteractiveServer
+
+<PageTitle>Game1Controller</PageTitle>
+
+<div style="display: flex; height: 100vh;">
+    <!-- Left div -->
+    <div style="width: 50%; flex: 1; background-color: lightblue;">
+        <!-- Content for the left div -->
+        <Joystick @ref=joystick DirectionChanged="OnDirectionChanged" />
+    </div>
+
+    <!-- Right div -->
+    <div style="width: 50%; background-color: lightgreen; display: flex; flex-direction: column;">
+        <button style="flex: 1; font-size: 80pt; background-color: lightcoral;" @onclick="(() => Send('F'.ToString()))">Fire!</button>
+    </div>
+</div>
+
+
+@code {
+    private Joystick? joystick;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    private void Send(string val)
+    {
+        Session.SendCommand(this, val);
+    }
+
+    private void OnDirectionChanged((Joystick, string) bla)
+    {
+        var (_, newDirection) = bla;
+        Send(newDirection);
+    }
+}
